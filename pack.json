@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "name": "skillify",
+  "description": "Turn a working agent workflow into a reusable, tested, cross-agent skill pack.",
+  "resources": [
+    "scripts",
+    "references",
+    "assets"
+  ],
+  "status": {
+    "unit": "pass",
+    "integration": "pass",
+    "llm_eval": "pass",
+    "resolver_eval": "pass"
+  }
+}

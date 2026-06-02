@@ -1,0 +1,3 @@
+{"id":"resolver-positive-en","query":"skillify it","expected":"skillify"}
+{"id":"resolver-positive-zh","query":"把它技能化","expected":"skillify"}
+{"id":"resolver-negative-storage","query":"help me run storage analysis on my disk","expected":null}

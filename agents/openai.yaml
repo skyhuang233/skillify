@@ -1,0 +1,4 @@
+interface:
+  display_name: "skillify"
+  short_description: "Turn working agent workflows into tested skill packs"
+  default_prompt: "Skillify the completed workflow into a reusable, tested skill pack."

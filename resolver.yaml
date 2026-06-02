@@ -1,0 +1,17 @@
+name: skillify
+description: Turn a working agent workflow into a reusable, tested, cross-agent skill pack.
+triggers:
+  - skillify it
+  - 把它技能化
+  - 创建技能包
+  - 把这次流程沉淀成 skill
+  - 生成 skill pack
+  - turn this into a skill
+  - create a skill pack
+  - convert this workflow into a reusable skill
+negative_examples:
+  - storage analysis
+  - disk cleanup
+  - create a PowerPoint deck
+  - edit this spreadsheet
+expected_confidence: 0.75

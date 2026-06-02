@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>skillify registry</title>
+<style>
+  :root{
+    --bg:#f7f7f4; --panel:#ffffff; --ink:#202124; --muted:#6b7280;
+    --line:#deded8; --accent:#0f766e; --accent-soft:#dff5f1;
+    --warn:#b45309; --warn-soft:#fff4d6; --bad:#b91c1c; --bad-soft:#fee2e2;
+    --ok:#15803d; --ok-soft:#dcfce7; --shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  header{border-bottom:1px solid var(--line);background:#fff;padding:22px 24px}
+  .wrap{max-width:1120px;margin:0 auto}
+  h1{font-size:24px;margin:0 0 4px}
+  .meta{color:var(--muted)}
+  .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:22px 0}
+  input,select{height:36px;border:1px solid var(--line);border-radius:6px;background:#fff;padding:0 10px;color:var(--ink)}
+  input{min-width:280px;flex:1}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+  details{background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:var(--shadow);overflow:hidden}
+  summary{cursor:pointer;list-style:none;padding:16px}
+  summary::-webkit-details-marker{display:none}
+  .title{display:flex;align-items:center;gap:8px;justify-content:space-between}
+  .name{font-weight:700;font-size:16px}
+  .desc{color:var(--muted);margin-top:8px;min-height:42px}
+  .body{border-top:1px solid var(--line);padding:14px 16px 16px}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+  .chip{border:1px solid var(--line);background:#fafafa;border-radius:999px;padding:3px 8px;font-size:12px}
+  .status{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+  .pill{border-radius:6px;padding:6px 8px;font-size:12px;font-weight:600;text-align:center}
+  .pass{background:var(--ok-soft);color:var(--ok)}
+  .pending{background:var(--warn-soft);color:var(--warn)}
+  .fail{background:var(--bad-soft);color:var(--bad)}
+  .unknown{background:#eef2f7;color:#475569}
+  code{font-family:"SF Mono",Consolas,monospace;font-size:12px;color:#334155}
+  .empty{border:1px dashed var(--line);border-radius:8px;padding:30px;text-align:center;color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>skillify registry</h1>
+    <div class="meta" id="meta"></div>
+  </div>
+</header>
+<main class="wrap">
+  <div class="toolbar">
+    <input id="search" placeholder="Search skills, descriptions, triggers, paths">
+    <select id="filter">
+      <option value="all">All statuses</option>
+      <option value="pass">All pass</option>
+      <option value="pending">Has pending</option>
+      <option value="fail">Has fail</option>
+    </select>
+  </div>
+  <div id="app"></div>
+</main>
+<script>
+const DATA = __REGISTRY_DATA__;
+const esc = value => String(value ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const skills = DATA.skills || [];
+document.getElementById('meta').textContent = `${skills.length} skill(s) · generated ${DATA.generated_at || 'locally'}`;
+
+function statusClass(value){
+  value = String(value || 'unknown').toLowerCase();
+  if(value === 'pass') return 'pass';
+  if(value === 'fail') return 'fail';
+  if(value === 'pending') return 'pending';
+  return 'unknown';
+}
+
+function card(skill){
+  const status = skill.status || {};
+  const triggers = (skill.triggers || []).map(t => `<span class="chip">${esc(t)}</span>`).join('');
+  const rows = ['unit','integration','llm_eval','resolver_eval'].map(key =>
+    `<div class="pill ${statusClass(status[key])}">${esc(key)}: ${esc(status[key] || 'unknown')}</div>`
+  ).join('');
+  return `<details>
+    <summary>
+      <div class="title"><span class="name">${esc(skill.name)}</span><span class="pill ${statusClass(overall(skill))}">${esc(overall(skill))}</span></div>
+      <div class="desc">${esc(skill.description)}</div>
+    </summary>
+    <div class="body">
+      <div>${esc(skill.summary || '')}</div>
+      <div class="chips">${triggers}</div>
+      <div><code>${esc(skill.path || '')}</code></div>
+      <div class="status">${rows}</div>
+    </div>
+  </details>`;
+}
+
+function overall(skill){
+  const values = Object.values(skill.status || {});
+  if(values.includes('fail')) return 'fail';
+  if(values.includes('pending')) return 'pending';
+  if(values.length && values.every(v => v === 'pass')) return 'pass';
+  return 'unknown';
+}
+
+function render(){
+  const q = document.getElementById('search').value.toLowerCase();
+  const filter = document.getElementById('filter').value;
+  const shown = skills.filter(skill => {
+    const haystack = JSON.stringify(skill).toLowerCase();
+    const status = overall(skill);
+    return haystack.includes(q) && (filter === 'all' || status === filter);
+  });
+  document.getElementById('app').innerHTML = shown.length
+    ? `<div class="grid">${shown.map(card).join('')}</div>`
+    : '<div class="empty">No skills match the current filter.</div>';
+}
+document.getElementById('search').addEventListener('input', render);
+document.getElementById('filter').addEventListener('change', render);
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+{"id":"skillify-en","input":"skillify it","expected_behavior":"Create or update a reusable skill pack with SKILL.md, minimum code, tests, evals, resolver metadata, and report registry coverage.","must_include":["SKILL.md","tests","evals","resolver"]}
+{"id":"skillify-zh","input":"把这次流程沉淀成 skill","expected_behavior":"提炼已跑通流程并生成跨 Agent skill pack，包含质量门和报告登记。","must_include":["skill pack","resolver","registry"]}
