@@ -29,12 +29,13 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("pack_dir", type=Path)
     args = parser.parse_args()
-    errors = validate_pack(args.pack_dir)
+    pack_dir = args.pack_dir.resolve()
+    errors = validate_pack(pack_dir)
     if errors:
         for error in errors:
             print(f"ERROR: {error}", file=sys.stderr)
         return 1
-    print(f"OK: {args.pack_dir}")
+    print(f"OK: {pack_dir}")
     return 0
 
 
