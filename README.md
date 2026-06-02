@@ -34,14 +34,22 @@ Optional folders are created only when useful:
 
 ## Install
 
-Clone this repository into your Codex skills directory:
+Clone this repository into your agent's skills directory.
+
+Codex:
 
 ```powershell
 git clone https://github.com/skyhuang233/skillify.git C:\Users\21340\.codex\skills\skillify
 ```
 
-For a portable location, replace the destination with your own skills directory,
-for example `~/.codex/skills/skillify`.
+Claude Code:
+
+```powershell
+git clone https://github.com/skyhuang233/skillify.git C:\Users\21340\.claude\skills\skillify
+```
+
+For portable locations, replace the destination with your own skills directory,
+for example `~/.codex/skills/skillify` or `~/.claude/skills/skillify`.
 
 ## Use
 
@@ -77,6 +85,9 @@ python scripts\run_llm_eval.py C:\Users\21340\.codex\skills\<skill-name>
 python scripts\resolve_skill.py --root C:\Users\21340\.codex\skills --query "skillify it"
 python scripts\build_report.py registry.json skillify-report.html
 ```
+
+When using Claude Code, replace `C:\Users\21340\.codex\skills` with
+`C:\Users\21340\.claude\skills` in commands that target generated packs.
 
 Use `PYTHONDONTWRITEBYTECODE=1` during verification if you want to avoid
 `__pycache__` files.
