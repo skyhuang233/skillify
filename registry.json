@@ -39,6 +39,26 @@
         "resolver_eval": "pass"
       },
       "summary": "Captures the tested implementation loop used to turn the approved skillify plan into a working cross-agent skill pack."
+    },
+    {
+      "name": "github-open-repo-publish",
+      "description": "Publish a local directory as a GitHub public open repository with README, commit, push, and verification.",
+      "path": "C:\\Users\\21340\\.codex\\skills\\github-open-repo-publish",
+      "triggers": [
+        "上传为github open repo",
+        "创建 github open repo",
+        "发布成 GitHub public repo",
+        "publish this as a public GitHub repo",
+        "make this an open repo",
+        "上传 open repo"
+      ],
+      "status": {
+        "unit": "pass",
+        "integration": "pass",
+        "llm_eval": "pass",
+        "resolver_eval": "pass"
+      },
+      "summary": "Captures the tested flow used to publish skillify as a public GitHub repository, including README creation and final remote verification."
     }
   ]
 }
